@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- INSERT INTO `foohang`.`member` (`member_id`, `email`, `password`, `nickName`, `region`, `food`, `birth`, `gender`)
+VALUES ('1', 'ssafy@ssafy.com', '1234', 'ssafy', '대전', '떡볶이', '1997.01.01', '1'); -->
+<mapper namespace="com.jjh.foohang.member.model.mapper.MemberMapper">
+    <!-- 회원가입 -->
+    <insert id ="regist" parameterType="member">
+        insert into member (email, password, nick_name, region, food, birth, gender)
+        values (#{email}, #{password}, #{nickName}, #{region}, #{food}, #{birth}, #{gender})
+    </insert>
+
+    <!-- 로그인 -->
+    <select id ="login" parameterType="member" resultType="member">
+        select email, password, nick_name, region, food, birth, gender from member
+        where email = #{email}
+    </select>
+
+</mapper>
