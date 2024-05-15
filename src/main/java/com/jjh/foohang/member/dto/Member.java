@@ -12,7 +12,7 @@ public class Member {
     private String  nickName;
     private String  region;
     private String  food;
-    private Date    birth;
+    private String    birth;
     private int     gender;
     private String  token;
 

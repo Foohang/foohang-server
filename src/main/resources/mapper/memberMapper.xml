@@ -12,7 +12,7 @@ VALUES ('1', 'ssafy@ssafy.com', '1234', 'ssafy', '대전', '떡볶이', '1997.01
 
     <!-- 로그인 -->
     <select id ="login" parameterType="member" resultType="member">
-        select email, password, nick_name, region, food, birth, gender from member
+        select member_id, email, password, nick_name, region, food, birth, gender from member
         where email = #{email}
     </select>
 

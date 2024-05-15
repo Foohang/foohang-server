@@ -42,6 +42,6 @@ public class MemberServiceImpl implements MemberService{
             return null;
 
 
-        return jwtUtil.generateToken(member);
+        return jwtUtil.generateToken(m);
     }
 }
