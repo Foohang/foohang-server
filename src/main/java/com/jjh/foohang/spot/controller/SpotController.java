@@ -76,7 +76,7 @@ public class SpotController {
         SidoGugun sidoGugunData = new SidoGugun();
         sidoGugunData.setSidoCode(sidoCode);
         sidoGugunData.setGugunCode(gugunCode);
-        sidoGugunData.setContentType(contentType);
+        sidoGugunData.setContentTypeId(contentType);
 
         List<Spot> spotList = spotService.getSpotList(sidoGugunData);
 
@@ -87,12 +87,22 @@ public class SpotController {
     }
 
     //관광지 콘텐츠 id로 상세조회
-    @GetMapping("/attractions/{contentType}")
-    public ResponseEntity<?> getSpotDetail (@PathVariable int contentType){
+    @GetMapping("/attractions/{contentId}")
+    public ResponseEntity<?> getSpotDetail (@PathVariable int contentId){
 
-        Spot spotInfo = spotService.getSpotDetail(contentType);
+        Spot spotInfo = spotService.getSpotDetail(contentId);
 
         return ResponseEntity.ok(spotInfo);
     }
 
+    //주변 맛집 위도 경도로 조회
+    @GetMapping("/attractions/restaurants/{contentId}")
+    public ResponseEntity<?> getAdjustRestaurant (@PathVariable int contentId)
+    {
+        List<Spot> RestaurantList = spotService.getAdjustResturant(contentId);
+
+        //System.out.println(RestaurantList);
+
+        return ResponseEntity.ok(RestaurantList);
+    }
 }

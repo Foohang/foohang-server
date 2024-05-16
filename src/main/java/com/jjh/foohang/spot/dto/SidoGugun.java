@@ -14,5 +14,5 @@ public class SidoGugun {
     private String  gugunName;
 
     //etc
-    private int     contentType; //관광지 유형
+    private int     contentTypeId; //관광지 유형
 }

@@ -22,7 +22,15 @@ public interface SpotMapper {
     //관광명소 조회 //여기서 시도, 구군, contentType 입력받은 내용으로 조회
     List<Spot> getSpotList(SidoGugun sidoGugun);
 
+    List<Spot> getSpotListAll(SidoGugun sidoGugun);
+
+    List<Spot> getRestaurantList();
+
     //관광명소 상세조회
     Spot getSpotDetail(int contentId);
 
+    Spot getSpotDetailAll();
+
+    //관광명소 contentId로 찾기
+    Spot findSpotByContentId(int contentId);
 }

@@ -25,4 +25,6 @@ public interface SpotService {
     //관광명소 상세조회
     Spot getSpotDetail(int contentId);
 
+    //위도 경도 기준 인접한 식당 조회
+    List<Spot> getAdjustResturant(int contentId);
 }
