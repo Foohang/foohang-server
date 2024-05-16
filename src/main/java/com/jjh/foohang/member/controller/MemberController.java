@@ -44,12 +44,11 @@ public class MemberController {
     }
 
     //회원 정보 수정
-/*    @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestBody Member updateInfo,
-                                    @RequestHeader("Authorization") String tokenHeader) {}*/
+
 
     @PutMapping("/")
-    public ResponseEntity<?> update(@RequestBody Member updateInfo)
+    public ResponseEntity<?> update(@RequestBody Member updateInfo,
+                                    @RequestHeader("Authorization") String tokenHeader)
     {
         //id값으로 회원 정보 가져오기
         Member member = service.findMemberById(updateInfo.getMemberId());
@@ -61,12 +60,15 @@ public class MemberController {
 
         //회원과 토큰정보가 일치하는지 체크
 
-        //String memberToken = jwtUtil.getIdFromToken(tokenHeader.substring(7));
-        //if(m.getMemberId().equals(memberToken));
+        //"Baerer "를 제외한 토큰
+        //int memberId = Integer.parseInt(jwtUtil.getIdFromToken(tokenHeader.substring(7)));
+        int memberId = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
+        //System.out.println(memberId);
 
-        //일치하면 수정
+        //토큰정보 일치한지 비교
+        if(member.getMemberId() != memberId)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 토큰이 일치하지 않습니다.");
 
-        //비밀번호 입력되지않을때
 
         member.setPassword(updateInfo.getPassword());
         member.setNickName(updateInfo.getNickName());
@@ -75,11 +77,14 @@ public class MemberController {
         member.setBirth(updateInfo.getBirth());
         member.setGender(updateInfo.getGender());
 
-        if(updateInfo.getPassword() == null)
-            service.updateNotIncludePassword(member);
+        String updateToken = "";
+        if(member.getPassword().equals(""))
+            updateToken = service.updateNotIncludePassword(member);
         else
-            service.updateIncludePassword(member);
+            updateToken = service.updateIncludePassword(member);
 
-        return ResponseEntity.ok().build();
+        System.out.println(updateToken);
+
+        return ResponseEntity.ok(updateToken);
     }
 }

@@ -45,21 +45,25 @@ public class MemberServiceImpl implements MemberService{
 
     @Override
     public Member findMemberById(int id) {
+
         return mapper.findMemberById(id);
     }
 
     @Override
-    public int updateIncludePassword(Member member) {
+    public String updateIncludePassword(Member member) {
 
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
-
-        return mapper.updateIncludePassword(member);
+        mapper.updateIncludePassword(member);
+        Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+        return jwtUtil.generateToken(updateUserInfo);
     }
 
     @Override
-    public int updateNotIncludePassword(Member member) {
-        return mapper.updateNotIncludePassword(member);
+    public String updateNotIncludePassword(Member member) {
+        mapper.updateNotIncludePassword(member);
+        Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+        return jwtUtil.generateToken(updateUserInfo);
     }
 
 }

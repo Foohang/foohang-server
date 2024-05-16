@@ -15,7 +15,7 @@ public interface MemberService {
 
     //회원 정보 수정하기
     //회원 정보 수정하기
-    int updateIncludePassword(Member member);
+    String updateIncludePassword(Member member);
 
-    int updateNotIncludePassword(Member member);
+    String updateNotIncludePassword(Member member);
 }

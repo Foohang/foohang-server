@@ -29,7 +29,7 @@ VALUES ('1', 'ssafy@ssafy.com', '1234', 'ssafy', '대전', '떡볶이', '1997.01
     </update>
 
     <!-- 회원 정보 수정 #1. 비밀번호 포함하지 않고 변경-->
-    <update id="updateNoIncludePassword" parameterType="member">
+    <update id="updateNotIncludePassword" parameterType="member">
         update member set nick_name=#{nickName}, region=#{region}, birth=#{birth}, food=#{food}, gender=#{gender}
         where member_id = #{memberId}
     </update>

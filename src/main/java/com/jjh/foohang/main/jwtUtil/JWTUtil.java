@@ -55,15 +55,15 @@ public class JWTUtil {
     }
 
     //토큰으로 부터 ID 조회
-    public String getIdFromToken(String token) {
+    public int getMemberIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
 
-        String id = (String) claims.get("id");
-        log.debug("claim id:{}",id);
-        return id;
+        int memberId = (Integer) claims.get("memberId");
+        log.debug("claim id:{}",memberId);
+        return memberId;
     }
 }
