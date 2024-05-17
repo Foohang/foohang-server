@@ -22,6 +22,12 @@ VALUES ('1', 'ssafy@ssafy.com', '1234', 'ssafy', '대전', '떡볶이', '1997.01
         where member_id = #{memberId}
     </select>
 
+    <!-- 회원 정보 이메일로 찾기 -->
+    <select id="findMemberByEmail" parameterType="string" resultType="member">
+        select member_id, email, nick_name, region, food, birth, gender from member
+        where email = #{email}
+    </select>
+
     <!-- 회원 정보 수정 #1. 비밀번호 포함 변경-->
     <update id="updateIncludePassword" parameterType="member">
         update member set password=#{password}, nick_name=#{nickName}, region=#{region}, food=#{food}, birth=#{birth}, gender=#{gender}

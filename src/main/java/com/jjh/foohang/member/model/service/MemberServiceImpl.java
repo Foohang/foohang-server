@@ -28,6 +28,8 @@ public class MemberServiceImpl implements MemberService{
         //DB에 저장
         mapper.regist(member);
 
+        member = mapper.findMemberByEmail(member.getEmail());
+
         return jwtUtil.generateToken(member);
     }
 
