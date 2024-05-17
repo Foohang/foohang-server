@@ -90,14 +90,15 @@ public class SpotServiceImpl implements SpotService {
 
             }
         }
-
         //식당의 개수가 너무 많을 때 거리가 가까운 순으로 정렬
         if(innerResturantList.size() > maxResturant)
+        {
             Collections.sort(innerResturantList, (Spot o1, Spot o2) -> Double.compare(o1.getDistance(), o2.getDistance()));
+            List<Spot> sortedRestaurantList = new ArrayList<>(innerResturantList.subList(0, 50));
+            return sortedRestaurantList;
+        }
 
-        List<Spot> sortedRestaurantList = new ArrayList<>(innerResturantList.subList(0, 50));
-
-        return sortedRestaurantList;
+        return innerResturantList;
     }
 
     //위도 경도를 통해 실제 km 값을 구하기
