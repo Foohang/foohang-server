@@ -44,4 +44,30 @@ public class RouteServiceImpl implements RouteService{
         Collections.sort(spotList, (Spot o1, Spot o2) -> Integer.compare(o2.getContentId(), o1.getContentId()));
         return spotList;
     }
+
+    @Override
+    public int saveRoute(List<Spot> spotList, int memberId) {
+        //1. "정렬된" spotList를 받아온다는 기준
+
+        //2. DB에서 Travel 하나 생성 -> id 받아옴
+        int createTravel = routeMapper.insertTravel(memberId);
+        System.out.println("여행 정보 travel 생성 : "+createTravel);
+
+        //현재 테이블에서 최대 값을 가져옴
+        int travelIndex = routeMapper.getTravelId();
+        System.out.println("현재 만들어진 travelId : "+travelIndex);
+
+        Travel travel = routeMapper.selectTravel(travelIndex);
+
+        //2-1Travel 정보를 모두 객체에 입력넣음
+
+        //3. spotList를 trail 리스트로 바꿈
+
+        //4. trail리스트를 db에 저장
+
+        //5. Travel 정보를 db에 저장
+
+
+        return 0;
+    }
 }
