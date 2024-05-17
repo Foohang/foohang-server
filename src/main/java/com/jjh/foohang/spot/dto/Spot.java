@@ -32,5 +32,5 @@ public class Spot {
     private String  overview;       //관광지 설명, 따로 가져와야됨
 
     private int     mealType;       //식사 타입 0: 아침 1: 점심: 2: 저녁
-    private int     main_accommodations;    //숙소여부,
+    private int     mainAccommodations;    //숙소여부,
 }
