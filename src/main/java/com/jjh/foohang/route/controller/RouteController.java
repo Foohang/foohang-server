@@ -18,15 +18,16 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RouteController {
 
-    //private final RouteService routeService;
+    private final RouteService routeService;
 
     //최적 경로 생성
     @PostMapping("/recommendation")
     public ResponseEntity<?> recommendation(@RequestBody List<Spot> spotList)
     {
-        System.out.println(spotList);
+        //System.out.println(spotList);
+        List<Spot> shortestRouteList = routeService.shortestPath(spotList);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(shortestRouteList);
     }
 
 }

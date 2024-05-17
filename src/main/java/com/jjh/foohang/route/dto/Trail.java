@@ -10,5 +10,5 @@ public class Trail {
     private int travelId;               //경로 카드 하나당 만들어지는 id
     private int contentId;              //관광지 id
     private int mealType;               //식사 타입 0: 아침 1: 점심: 2: 저녁
-    private int main_accommodations;    //숙소인지 여부
+    private int mainAccommodations;    //숙소인지 여부
 }
