@@ -15,6 +15,9 @@ public interface MemberMapper {
     //회원 정보 id값으로 찾기
     Member findMemberById(int id);
 
+    //회원 정보 이메일로 찾기
+    Member findMemberByEmail(String email);
+
     //회원 정보 수정하기
     int updateIncludePassword(Member member);
 
