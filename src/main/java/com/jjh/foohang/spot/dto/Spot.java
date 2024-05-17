@@ -24,8 +24,10 @@ public class Spot {
     private String  addr1;          //관광지 상세 주소
     private String  firstImage;     //관광지 사진 URL1
     private String  firstImage2;    //관광지 사진 URL2
+    private int     readCount;      //조회수
     private double  latitude;       //위도
     private double  longitude;      //경도
 
+    private double  distance;        //거리
     private String  overview;       //관광지 설명, 따로 가져와야됨
 }
