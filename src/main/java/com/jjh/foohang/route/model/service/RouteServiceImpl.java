@@ -40,8 +40,8 @@ public class RouteServiceImpl implements RouteService{
 
         //Travel routeCard = new Travel();
 
-        //임시로 조회수 순으로 정렬
-        Collections.sort(spotList, (Spot o1, Spot o2) -> Integer.compare(o1.getReadCount(), o2.getReadCount();
+        //임시로 contentId 내림차순으로 정렬
+        Collections.sort(spotList, (Spot o1, Spot o2) -> Integer.compare(o2.getContentId(), o1.getContentId()));
         return spotList;
     }
 }
