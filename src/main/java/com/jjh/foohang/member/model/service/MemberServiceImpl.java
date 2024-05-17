@@ -34,8 +34,6 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public String login(Member member) {
 
-
-
         Member m = mapper.login(member);
         System.out.println("서비스 멤버 정보 :"+m);
         if(m == null || !passwordEncoder.matches(member.getPassword(),m.getPassword()))
@@ -44,4 +42,28 @@ public class MemberServiceImpl implements MemberService{
 
         return jwtUtil.generateToken(m);
     }
+
+    @Override
+    public Member findMemberById(int id) {
+
+        return mapper.findMemberById(id);
+    }
+
+    @Override
+    public String updateIncludePassword(Member member) {
+
+        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encodedPassword);
+        mapper.updateIncludePassword(member);
+        Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+        return jwtUtil.generateToken(updateUserInfo);
+    }
+
+    @Override
+    public String updateNotIncludePassword(Member member) {
+        mapper.updateNotIncludePassword(member);
+        Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+        return jwtUtil.generateToken(updateUserInfo);
+    }
+
 }

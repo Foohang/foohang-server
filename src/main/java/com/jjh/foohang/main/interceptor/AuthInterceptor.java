@@ -22,7 +22,8 @@ public class AuthInterceptor implements HandlerInterceptor {
         //단순 조회 요청과 preflight 요청인 경우, true 로 넘김
         String method = request.getMethod();
         log.debug("AuthInterceptor()의 preHandle실행 method:{}", method);
-        if(method.equals("GET") || method.equals("OPTIONS")) return true;
+        if(method.equals("GET") || method.equals("OPTIONS") || method.equals("POST"))
+            return true;
 
         String tokenHeader = request.getHeader("Authorization");	//Header에서 토큰 정보 추출
         //토큰 헤더가 없거나 Bearer로 시작하지 않는 경우
@@ -43,6 +44,4 @@ public class AuthInterceptor implements HandlerInterceptor {
         return true;
 
     }
-
-
 }
