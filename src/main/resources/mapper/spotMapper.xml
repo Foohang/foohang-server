@@ -93,7 +93,17 @@
 
     <!-- 관광지 상세조회 콘텐츠 id가 0이 아닐때-->
     <select id="getSpotDetail" parameterType="int" resultType="spot">
-        select d.content_id as `content_id`, d.overview as `overview`, i.content_type_id as `content_type_id`, i.title as `title`, i.addr1 as `addr1`
+        select
+            d.content_id as `content_id`,
+            i.content_type_id as `content_type_id`,
+            i.title as `title`,
+            i.addr1 as `addr1`,
+            i.first_image as `first_image`,
+            i.first_image2 as `first_image2`,
+            i.read_count as `read_count`,
+            i.latitude as `latitude`,
+            i.longitude as `longitude`,
+            d.overview as `overview`
         from attraction_description d join attraction_info i
         using (content_id)
         where content_id = #{contentId}
@@ -101,7 +111,17 @@
 
     <!-- 관광지 상세조회, 콘텐츠 id가 0일때는 전체조회-->
     <select id="getSpotDetailAll" resultType="spot">
-        select d.content_id as `content_id`, d.overview as `overview`, i.content_type_id as `content_type_id`, i.title as `title`, i.addr1 as `addr1`
+        select
+            d.content_id as `content_id`,
+            i.content_type_id as `content_type_id`,
+            i.title as `title`,
+            i.addr1 as `addr1`,
+            i.first_image as `first_image`,
+            i.first_image2 as `first_image2`,
+            i.read_count as `read_count`,
+            i.latitude as `latitude`,
+            i.longitude as `longitude`,
+            d.overview as `overview`
         from attraction_description d join attraction_info i
         using (content_id)
     </select>
