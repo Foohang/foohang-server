@@ -74,4 +74,10 @@
             from trail
         where travel_id = #{travelId}
     </select>
+
+    <!-- 삭제 -->
+    <delete id="deleteTravelByTravelId" parameterType="int">
+        delete from travel
+        where travel_id=#{travelId}
+    </delete>
 </mapper>

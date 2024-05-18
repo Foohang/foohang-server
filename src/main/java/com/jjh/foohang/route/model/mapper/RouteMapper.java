@@ -30,4 +30,7 @@ public interface RouteMapper {
     List<Travel> selectTravelsByMemberId(int memberId);
 
     List<Trail> selectTrailByTravelId(int travelId);
+
+    //travel 삭제
+    int deleteTravelByTravelId(int travelId);
 }
