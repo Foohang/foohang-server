@@ -174,4 +174,9 @@ public class RouteServiceImpl implements RouteService{
         System.out.println("노드 저장 성공");
         return travelUpdateComplate;
     }
+
+    @Override
+    public List<Travel> findTravelListByMemberId(int memberId) {
+        return routeMapper.selectTravelsByMemberId(memberId);
+    }
 }
