@@ -4,30 +4,44 @@
 
 <mapper namespace="com.jjh.foohang.spot.model.mapper.SpotMapper">
     <!-- 시도리스트 전체 조회 -->
-    <select id="getSidoList" resultType="SidoGugun">
-        select
+
+    <!-- 시도 관련 코드 -->
+    <sql id="sidoCol">
+        sido_code,
+        sido_name,
+        sido_image
+    </sql>
+
+    <sql id="spotCol">
+            content_id,
+            content_type_id,
+            title,
+            addr1,
+            first_image,
+            first_image2,
+            read_count,
             sido_code,
-            sido_name,
-            sido_image
+            gugun_code,
+            latitude,
+            longitude
+    </sql>
+
+
+    <select id="getSidoList" resultType="SidoGugun">
+        select <include refid="sidoCol"></include>
         from sido
     </select>
 
     <!-- 시도리스트 이름으로 조회 -->
     <select id="findSidoBySidoName" parameterType="string" resultType="SidoGugun">
-        select
-            sido_code,
-            sido_name,
-            sido_image
+        select <include refid="sidoCol"></include>
         from sido
         where sido_name like concat('%', #{sidoName}, '%')
     </select>
 
     <!-- 시도리스트 시도코드로 조회 -->
     <select id="findSidoBySidoCode" parameterType="int" resultType="SidoGugun">
-        select
-            sido_code,
-            sido_name,
-            sido_image
+        select <include refid="sidoCol"></include>
         from sido
         where sido_code = #{sidoCode}
     </select>
@@ -43,16 +57,7 @@
 
     <!-- 관광명 조회 -->
     <select id="getSpotList" parameterType="SidoGugun" resultType="spot">
-        select
-            content_id,
-            content_type_id,
-            title,
-            addr1,
-            first_image,
-            first_image2,
-            read_count,
-            latitude,
-            longitude
+        select <include refid="spotCol"></include>
         from attraction_info
         where sido_code = #{sidoCode}
           and gugun_code =#{gugunCode}
@@ -60,16 +65,7 @@
     </select>
 
     <select id="getSpotListAll" parameterType="SidoGugun" resultType="spot">
-        select
-            content_id,
-            content_type_id,
-            title,
-            addr1,
-            first_image,
-            first_image2,
-            read_count,
-            latitude,
-            longitude
+        select <include refid="spotCol"></include>
         from attraction_info
         where sido_code = #{sidoCode}
           and gugun_code =#{gugunCode}
@@ -77,16 +73,7 @@
 
     <!-- 전국 모든 음식점 조회 -->
     <select id="getRestaurantList" resultType="spot">
-        select
-            content_id,
-            content_type_id,
-            title,
-            addr1,
-            first_image,
-            first_image2,
-            read_count,
-            latitude,
-            longitude
+        select <include refid="spotCol"></include>
         from attraction_info
         where content_type_id = 39
     </select>
@@ -101,6 +88,8 @@
             i.first_image as `first_image`,
             i.first_image2 as `first_image2`,
             i.read_count as `read_count`,
+            i.sido_code as `sido_code`,
+            i.gugun_code as `gugun_code`,
             i.latitude as `latitude`,
             i.longitude as `longitude`,
             d.overview as `overview`
@@ -119,6 +108,8 @@
             i.first_image as `first_image`,
             i.first_image2 as `first_image2`,
             i.read_count as `read_count`,
+            i.sido_code as `sido_code`,
+            i.gugun_code as `gugun_code`,
             i.latitude as `latitude`,
             i.longitude as `longitude`,
             d.overview as `overview`
@@ -128,14 +119,7 @@
 
     <!-- 관광지 contentId로 조회 -->
     <select id="findSpotByContentId" parameterType="int" resultType="spot">
-        select content_type_id,
-               title,
-               addr1,
-               first_image,
-               first_image2,
-               read_count,
-               latitude,
-               longitude
+        select <include refid="spotCol"></include>
         from attraction_info
         where content_id = #{contentId}
     </select>

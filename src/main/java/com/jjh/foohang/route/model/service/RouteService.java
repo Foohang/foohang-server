@@ -10,6 +10,6 @@ public interface RouteService {
     List<Spot> shortestPath(List<Spot> spotList);
 
     //경로 추가 (경로 저장)
-    int saveRoute(List<Spot> spotList, int memberId);
+    int saveRoute(List<Spot> spotList, int memberId, String startDate, String endDate);
 
 }

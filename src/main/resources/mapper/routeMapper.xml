@@ -6,23 +6,24 @@
 
     <!-- 여행 정보 생성 -->
     <insert id="insertTravel" parameterType="int">
-        insert into travel member_id values #{memberId}
+        insert into travel (member_id) values (#{memberId})
     </insert>
 
     <!-- 여행 정보 travelID로 조회 -->
-    <select id="selectTravel" parameterType="int" resultType="int">
-        select travel_id from travel where travel_id = #{travelId}
+    <select id="selectTravel" parameterType="int" resultType="Travel">
+        select travel_id, member_id from travel where travel_id = #{travelId}
     </select>
 
     <!-- 현재 인덱스 조회 -->
     <select id="getTravelId" resultType="int">
-        select travel_id from travel where (select MAX(travel_id) from travel);
+        select MAX(travel_id) from travel;
     </select>
 
     <!-- 여행정보를 db에 저장 -->
     <update id="updateTravel" parameterType="Travel">
         update travel set
-            region = #{region},
+            start_region = #{startRegion},
+            end_region = #{endRegion},
             start_date = #{startDate},
             end_date = #{endDate},
             start_image = #{startImage},
@@ -31,5 +32,11 @@
             end_attraction = #{endAttraction}
         where travel_id = #{travelId}
     </update>
+
+    <!-- 여행 경로 노드들을 저장 -->
+    <insert id="insertTrail" parameterType="trail">
+        insert into trail (travel_id, content_id, meal_type, main_accommodations)
+        values (#{travelId}, #{contentId}, #{mealType}, #{mainAccommodations})
+    </insert>
 
 </mapper>

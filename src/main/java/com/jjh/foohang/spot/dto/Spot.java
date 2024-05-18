@@ -25,6 +25,8 @@ public class Spot {
     private String  firstImage;     //관광지 사진 URL1
     private String  firstImage2;    //관광지 사진 URL2
     private int     readCount;      //조회수
+    private int     sidoCode;       //시도
+    private int     gugunCode;      //구군
     private double  latitude;       //위도
     private double  longitude;      //경도
 

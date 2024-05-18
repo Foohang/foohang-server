@@ -8,7 +8,9 @@ public class Travel {
 
     private int     travelId;       //  여행 id, 이 값으로 db 조회
     private int     memberId;       //  멤버 id 정보, 이 값으로 db 조회
-    private String  region;         //  지역 탭
+    
+    private String  startRegion;     //  여행 시작 지역
+    private String  endRegion;       //  여행 끝 지역
     private String  startDate;      //  여행 시작 날짜
     private String  endDate;        //  여행 끝 날짜
     private String  startImage;     //  시작점 이미지

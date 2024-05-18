@@ -24,6 +24,6 @@ public interface RouteMapper {
     int updateTravel(Travel travel);
 
     //경로 노드들을 db에 저장
-    int insertTrail(List<Trail> trailList);
+    int insertTrail(Trail trail);
 
 }
