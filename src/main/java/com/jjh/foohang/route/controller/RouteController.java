@@ -3,6 +3,7 @@ package com.jjh.foohang.route.controller;
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
+import com.jjh.foohang.route.dto.Trail;
 import com.jjh.foohang.route.dto.Travel;
 import com.jjh.foohang.route.model.service.RouteService;
 import com.jjh.foohang.spot.dto.Spot;
@@ -86,6 +87,23 @@ public class RouteController {
         }
 
         return ResponseEntity.ok(travelList);
+    }
+
+    @GetMapping("/{travelId}")
+    public ResponseEntity<?> findTrailListByTravelId(@RequestHeader("Authorization") String tokenHeader,@PathVariable int travelId)
+    {
+        Member authMember = checkUser(tokenHeader);
+
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+
+        List<Trail> trailList = routeService.findTrailListByTravelId(travelId);
+
+        if(trailList ==null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("trail 리스트 정보를 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.ok(trailList);
     }
 
 }

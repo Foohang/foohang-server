@@ -179,4 +179,9 @@ public class RouteServiceImpl implements RouteService{
     public List<Travel> findTravelListByMemberId(int memberId) {
         return routeMapper.selectTravelsByMemberId(memberId);
     }
+
+    @Override
+    public List<Trail> findTrailListByTravelId(int travelId) {
+        return routeMapper.selectTrailByTravelId(travelId);
+    }
 }

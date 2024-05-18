@@ -18,6 +18,14 @@
         end_attraction
     </sql>
 
+    <sql id="trailCol">
+        id,
+        travel_id,
+        content_id,
+        meal_type,
+        main_accommodations
+    </sql>
+
     <!-- 여행 정보 생성 -->
     <insert id="insertTravel" parameterType="int">
         insert into travel (member_id) values (#{memberId})
@@ -60,4 +68,10 @@
         where member_id = #{memberId}
     </select>
 
+    <!-- travel id로 경로 노드들 찾기 -->
+    <select id="selectTrailByTravelId" parameterType="int" resultType="trail">
+        select <include refid="trailCol"></include>
+            from trail
+        where travel_id = #{travelId}
+    </select>
 </mapper>

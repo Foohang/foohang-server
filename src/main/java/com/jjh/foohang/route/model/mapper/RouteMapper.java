@@ -29,4 +29,5 @@ public interface RouteMapper {
     //멤버 id로 리스트 조회
     List<Travel> selectTravelsByMemberId(int memberId);
 
+    List<Trail> selectTrailByTravelId(int travelId);
 }
