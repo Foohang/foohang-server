@@ -18,5 +18,5 @@ public interface RouteService {
     List<Travel> findTravelListByMemberId(int memberId);
 
     //trail 리스트 조회
-    List<Trail> findTrailListByTravelId(int travelId);
+    List<Spot> findTrailListByTravelId(int travelId);
 }
