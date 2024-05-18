@@ -26,4 +26,7 @@ public interface RouteMapper {
     //경로 노드들을 db에 저장
     int insertTrail(Trail trail);
 
+    //멤버 id로 리스트 조회
+    List<Travel> selectTravelsByMemberId(int memberId);
+
 }

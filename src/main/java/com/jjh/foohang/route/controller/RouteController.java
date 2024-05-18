@@ -3,6 +3,7 @@ package com.jjh.foohang.route.controller;
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
+import com.jjh.foohang.route.dto.Travel;
 import com.jjh.foohang.route.model.service.RouteService;
 import com.jjh.foohang.spot.dto.Spot;
 import lombok.RequiredArgsConstructor;
@@ -21,15 +22,24 @@ public class RouteController {
     private final MemberService memberService;
     private final JWTUtil jwtUtil;
 
+    private Member checkUser(String token)
+    {
+        int memberId = jwtUtil.getMemberIdFromToken(token.substring(7));
+
+        Member authMember = memberService.findMemberById(memberId);
+
+        if(authMember == null)
+            return null;
+
+        return authMember;
+    }
+
     //최적 경로 생성
     @PostMapping("/recommendation")
     public ResponseEntity<?> recommendation(@RequestBody List<Spot> spotList
                     , @RequestHeader("Authorization") String tokenHeader)
     {
-        //System.out.println(tokenHeader);
-        int memberId = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
-
-        Member authMember = memberService.findMemberById(memberId);
+        Member authMember = checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 정보가 존재하지 않습니다.");
@@ -47,23 +57,35 @@ public class RouteController {
                                       @PathVariable String startDate,
                                       @PathVariable String endDate)
     {
-        //0.(인터셉터? 로그인 인증 받아야됨)
-
-        int memberId = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
-        System.out.println(memberId);
-
-        Member authMember = memberService.findMemberById(memberId);
+        Member authMember = checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
 
-
-            int result = routeService.saveRoute(spotList, memberId, startDate, endDate);
+            int result = routeService.saveRoute(spotList, authMember.getMemberId(), startDate, endDate);
 
             if(result == -1)
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("경로가 정상적으로 저장되지 않았습니다.");
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?>  findTravelByMemberId(@RequestHeader("Authorization") String tokenHeader)
+    {
+        Member authMember = checkUser(tokenHeader);
+
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+
+        List<Travel> travelList = routeService.findTravelListByMemberId(authMember.getMemberId());
+
+        if(travelList == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("리스트 정보가 없습니다.");
+        }
+
+        return ResponseEntity.ok(travelList);
     }
 
 }

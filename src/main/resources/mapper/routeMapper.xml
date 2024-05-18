@@ -4,6 +4,20 @@
 
 <mapper namespace="com.jjh.foohang.route.model.mapper.RouteMapper">
 
+    <!-- 시도 관련 코드 -->
+    <sql id="travelCol">
+        travel_id,
+        member_id,
+        start_region,
+        end_region,
+        start_date,
+        end_date,
+        start_image,
+        end_image,
+        start_attraction,
+        end_attraction
+    </sql>
+
     <!-- 여행 정보 생성 -->
     <insert id="insertTravel" parameterType="int">
         insert into travel (member_id) values (#{memberId})
@@ -38,5 +52,12 @@
         insert into trail (travel_id, content_id, meal_type, main_accommodations)
         values (#{travelId}, #{contentId}, #{mealType}, #{mainAccommodations})
     </insert>
+
+    <!-- 회원 id로 갔던 여행지들 조회 -->
+    <select id="selectTravelsByMemberId" parameterType="int" resultType="Travel">
+        select <include refid="travelCol"></include>
+            from travel
+        where member_id = #{memberId}
+    </select>
 
 </mapper>
