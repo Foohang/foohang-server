@@ -4,6 +4,7 @@ import com.jjh.foohang.route.dto.Trail;
 import com.jjh.foohang.route.dto.Travel;
 import com.jjh.foohang.route.model.mapper.RouteMapper;
 import com.jjh.foohang.spot.dto.Spot;
+import com.jjh.foohang.spot.model.mapper.SpotMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class RouteServiceImpl implements RouteService{
 
     private final RouteMapper routeMapper;
+    private final SpotMapper    spotMapper;
 
     private String sidoToString(int sidoCode) {
         String region = "";
@@ -181,7 +183,28 @@ public class RouteServiceImpl implements RouteService{
     }
 
     @Override
-    public List<Trail> findTrailListByTravelId(int travelId) {
-        return routeMapper.selectTrailByTravelId(travelId);
+    public List<Spot> findTrailListByTravelId(int travelId) {
+        List<Trail> trailList = routeMapper.selectTrailByTravelId(travelId);
+
+        List<Spot> spotList = new ArrayList<>();
+        if(trailList!= null)
+        {
+            for(Trail trail : trailList)
+            {
+                Spot spot = spotMapper.findSpotByContentId(trail.getContentId());
+
+                if(spot == null)
+                {
+                    System.out.println("Spot 데이터 손상");
+                    return null;
+                }
+                spot.setMealType(trail.getMealType());
+                spot.setMainAccommodations(trail.getMainAccommodations());
+
+                spotList.add(spot);
+            }
+        }
+
+        return spotList;
     }
 }

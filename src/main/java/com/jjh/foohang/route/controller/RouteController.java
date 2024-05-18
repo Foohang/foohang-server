@@ -97,7 +97,7 @@ public class RouteController {
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
 
-        List<Trail> trailList = routeService.findTrailListByTravelId(travelId);
+        List<Spot> trailList = routeService.findTrailListByTravelId(travelId);
 
         if(trailList ==null){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("trail 리스트 정보를 찾을 수 없습니다.");
