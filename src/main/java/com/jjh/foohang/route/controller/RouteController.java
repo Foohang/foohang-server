@@ -106,4 +106,20 @@ public class RouteController {
         return ResponseEntity.ok(trailList);
     }
 
+    @DeleteMapping("/{travelId}")
+    public ResponseEntity<?> deleteTravelByTravelId(@RequestHeader("Authorization") String tokenHeader,@PathVariable int travelId)
+    {
+        Member authMember = checkUser(tokenHeader);
+
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+
+        int isDeleted = routeService.deleteTravelByTravelId(travelId);
+        if(isDeleted != 1)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패");
+
+        System.out.println("travelId :"+travelId +" 삭제 성공");
+
+        return ResponseEntity.ok().build();
+    }
 }

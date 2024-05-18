@@ -19,4 +19,8 @@ public interface RouteService {
 
     //trail 리스트 조회
     List<Spot> findTrailListByTravelId(int travelId);
+  
+    //travel 리스트 삭제
+    int deleteTravelByTravelId(int travelId);
+    
 }

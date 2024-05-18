@@ -158,7 +158,8 @@ public class RouteServiceImpl implements RouteService{
             System.out.println("trailInsert : " +result);
             if(result!=1)
             {
-                //TODO:: 매퍼에서 travel 탭 삭제
+                System.out.println("trail 일부 삽입 실패");
+                routeMapper.deleteTravelByTravelId(travelIndex);
                 return -1;
             }
         }
@@ -169,7 +170,7 @@ public class RouteServiceImpl implements RouteService{
         if(travelUpdateComplate!=1)
         {
             System.out.println("노드 저장 실패");
-            //TODO::매퍼에서 travel 탭 삭제
+            routeMapper.deleteTravelByTravelId(travelIndex);
             return -1;
         }
 
@@ -206,5 +207,10 @@ public class RouteServiceImpl implements RouteService{
         }
 
         return spotList;
+    }
+
+    @Override
+    public int deleteTravelByTravelId(int travelId) {
+        return routeMapper.deleteTravelByTravelId(travelId);
     }
 }
