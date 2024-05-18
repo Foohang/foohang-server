@@ -19,8 +19,8 @@ public class WebConfig implements WebMvcConfigurer {
         //인터셉터 추가, 현재 안씀
         registry
                 .addInterceptor(interceptor)
-                .addPathPatterns("/members/");
-
+                .addPathPatterns("/members/")
+                .addPathPatterns("/routes/");
     }
 
     @Override
