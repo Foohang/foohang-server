@@ -1,5 +1,6 @@
 package com.jjh.foohang.route.model.service;
 
+import com.jjh.foohang.route.dto.Trail;
 import com.jjh.foohang.route.dto.Travel;
 import com.jjh.foohang.spot.dto.Spot;
 
@@ -15,4 +16,7 @@ public interface RouteService {
 
     //travel 리스트 조회
     List<Travel> findTravelListByMemberId(int memberId);
+
+    //trail 리스트 조회
+    List<Trail> findTrailListByTravelId(int travelId);
 }
