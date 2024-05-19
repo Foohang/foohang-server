@@ -5,37 +5,37 @@
 <mapper namespace="com.jjh.foohang.member.model.mapper.MemberMapper">
     <!-- 회원가입 -->
     <insert id ="regist" parameterType="member">
-        insert into member (email, password, nick_name, region, food, birth, gender, profile_name)
-        values (#{email}, #{password}, #{nickName}, #{region}, #{food}, #{birth}, #{gender}, #{profileName})
+        insert into member (email, password, nick_name, region, food, birth, gender, status_message, profile_name)
+        values (#{email}, #{password}, #{nickName}, #{region}, #{food}, #{birth}, #{gender}, #{statusMessage}, #{profileName})
     </insert>
 
     <!-- 로그인 -->
     <select id ="login" parameterType="member" resultType="member">
-        select member_id, email, password, nick_name, region, food, birth, gender, profile_name from member
+        select member_id, email, password, nick_name, region, food, birth, gender, status_message, profile_name from member
         where email = #{email}
     </select>
 
     <!-- 회원 정보 id로 찾기 -->
     <select id="findMemberById" parameterType="int" resultType="member">
-        select member_id, email, nick_name, region, food, birth, gender, profile_name from member
+        select member_id, email, nick_name, region, food, birth, gender, status_message, profile_name from member
         where member_id = #{memberId}
     </select>
 
     <!-- 회원 정보 이메일로 찾기 -->
     <select id="findMemberByEmail" parameterType="string" resultType="member">
-        select member_id, email, nick_name, region, food, birth, gender, profile_name from member
+        select member_id, email, nick_name, region, food, birth, gender, status_message, profile_name from member
         where email = #{email}
     </select>
 
     <!-- 회원 정보 수정 #1. 비밀번호 포함 변경-->
     <update id="updateIncludePassword" parameterType="member">
-        update member set password=#{password}, nick_name=#{nickName}, region=#{region}, food=#{food}, birth=#{birth}, gender=#{gender}
+        update member set password=#{password}, nick_name=#{nickName}, region=#{region}, food=#{food}, birth=#{birth}, gender=#{gender}, status_message=#{statusMessage}
         where member_id = #{memberId}
     </update>
 
     <!-- 회원 정보 수정 #1. 비밀번호 포함하지 않고 변경-->
     <update id="updateNotIncludePassword" parameterType="member">
-        update member set nick_name=#{nickName}, region=#{region}, birth=#{birth}, food=#{food}, gender=#{gender}
+        update member set nick_name=#{nickName}, region=#{region}, birth=#{birth}, food=#{food}, gender=#{gender}, status_message=#{statusMessage}
         where member_id = #{memberId}
     </update>
 

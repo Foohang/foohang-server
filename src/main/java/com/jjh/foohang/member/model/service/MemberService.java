@@ -8,7 +8,7 @@ import java.io.IOException;
 public interface MemberService {
 
     //회원 가입
-    String regist(Member member, MultipartFile file) throws IOException;
+    String regist(Member member, MultipartFile[] file) throws IOException;
 
     //내 회원 정보 조회 (로그인)
     String login(Member member);

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.jjh.foohang.review.model.mapper.ReviewMapper">
+
+    <!--리뷰 등록-->
+    <insert id="insertReview" parameterType="review">
+        insert into review (member_id, selected_date, uploaded_date, hashtags, review_title, review_text, selected_emotion, files)
+        values (#{memberId}, #{selectedDate}, #{uploadedDate}, #{hashtags}, #{reviewTitle}, #{reviewText}, #{selectedEmotion}, #{files})
+    </insert>
+
+    <!-- 회원 id 최상위 인덱스 조회 -->
+    <select id="getReviewIdMax" resultType="int">
+        select MAX(review_id) from review;
+    </select>
+</mapper>

@@ -1,5 +1,6 @@
 package com.jjh.foohang.main.fileIO.controller;
 
+import com.jjh.foohang.main.fileIO.EFileType;
 import com.jjh.foohang.main.fileIO.FileIO;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +21,12 @@ import java.io.IOException;
 public class FileController {
 
     private final FileIO fileIo;
-
     @GetMapping("/{fileName}")
     public ResponseEntity<?>downloadFile(@PathVariable String fileName)
     {
         Resource res = null;
         try{
-            res = fileIo.downlodedFile(fileName);
+            res = fileIo.downlodedFile(fileName, EFileType.PROFILE_IMAGE);
         }catch(IOException e){
             e.printStackTrace();
         }

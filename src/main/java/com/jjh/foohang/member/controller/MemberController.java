@@ -28,7 +28,7 @@ public class MemberController {
 
     @PostMapping("/regist")
     public ResponseEntity<?> regist(
-            @RequestPart("file") MultipartFile file,
+            @RequestPart(value = "file", required = false) MultipartFile[] file,
             @RequestPart("email") String email,
             @RequestPart("password") String password,
             @RequestPart("nickName") String nickName,
