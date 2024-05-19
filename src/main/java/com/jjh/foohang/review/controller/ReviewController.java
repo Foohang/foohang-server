@@ -4,12 +4,15 @@ import com.jjh.foohang.main.jwtUtil.JWTUtil;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
 import com.jjh.foohang.review.dto.Review;
+import com.jjh.foohang.review.dto.SelectReviewResponse;
 import com.jjh.foohang.review.model.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -64,4 +67,23 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
+
+    @GetMapping("/")
+    public ResponseEntity<?> addReview(@RequestHeader("Authorization") String tokenHeader)
+    {
+        //인증
+        int idToken = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
+
+        int memberId = memberService.findMemberById(idToken).getMemberId();
+
+        if(memberId != idToken)
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 토큰이 일치하지 않습니다.");
+
+        List<SelectReviewResponse> reviewList = reviewService.selectReviewByMemberId(memberId);
+
+        if(reviewList == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("리뷰가 없거나 조회가 안됏읍니다");
+
+        return ResponseEntity.ok(reviewList);
+    }
 }
