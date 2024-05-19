@@ -38,6 +38,9 @@ public class JWTUtil {
                 .claim("food", member.getFood())
                 .claim("birth", member.getBirth())
                 .claim("gender", member.getGender())
+                .claim("statusMessage", member.getStatusMessage())
+                .claim("profileName", member.getProfileName())
+                //.claim("profile", member.getProfile())
                 .expiration(expiration)				//만료 시간
                 .signWith(getSecretKey())
                 .compact();
