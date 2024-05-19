@@ -8,5 +8,9 @@ public interface ReviewMapper {
 
     //리뷰 등록
     int insertReview(Review review);
+
+    //리뷰 번호 조회
+    int getReviewIdMax();
+
     //리뷰 조회
 }

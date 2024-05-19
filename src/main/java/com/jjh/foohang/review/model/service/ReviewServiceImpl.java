@@ -23,8 +23,11 @@ public class ReviewServiceImpl implements ReviewService{
 
         List<String> fileList = null;
         //파일 등록
+
+        int reviewIdx = reviewMapper.getReviewIdMax();
+
         try {
-            fileList = fileIO.saveUplodedFiles(files, review.getMemberId(), EFileType.REVIEW_IMAGES);
+            fileList = fileIO.saveUplodedFiles(files, "file_"+reviewIdx, EFileType.REVIEW_IMAGES);
         }catch(IOException e)
         {
             e.printStackTrace();

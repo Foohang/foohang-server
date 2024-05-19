@@ -8,7 +8,7 @@ public class Review {
     private int     reviewId;
     private int     memberId;
     private String  selectedDate;       // 게시글 작성 날짜
-    private String  uplodedDate;        // 업로드 날짜
+    private String  uploadedDate;        // 업로드 날짜
     private String  hashtags;           // 해시태그, #마다 파싱 필요
     private String  reviewTitle;        // 제목
     private String  reviewText;         // 리뷰

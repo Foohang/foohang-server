@@ -34,14 +34,16 @@ public class FileIO {
     }
 
     //성공 시 저장한 파일 명 반환
-    public List<String> saveUplodedFiles(MultipartFile[] files, int memberId, EFileType fileType) throws IOException
+    public List<String> saveUplodedFiles(MultipartFile[] files, String prefix, EFileType fileType) throws IOException
     {
         String fileName = null;
         List<String> fileNameList = new ArrayList<>();
         if(files != null)
         {
+            int idx = 0;
             for(MultipartFile file : files)
             {
+                idx++;
                 if(file.isEmpty())
                 {
                     System.out.println("파일이 존재하지 않습니다.");
@@ -52,7 +54,7 @@ public class FileIO {
 
                     //확장자 추출
                     fileName = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
-                    fileName = memberId+fileName;
+                    fileName = prefix+"_"+idx+fileName;
                     Path path = Paths.get(LOCAL_PATH+getAdditionalPath(fileType), fileName);
                     Files.write(path, bytes);
 
