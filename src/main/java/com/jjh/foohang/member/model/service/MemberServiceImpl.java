@@ -1,12 +1,17 @@
 package com.jjh.foohang.member.model.service;
 
+import com.jjh.foohang.main.fileIO.FileIO;
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
@@ -17,18 +22,42 @@ public class MemberServiceImpl implements MemberService{
     //인증 토큰 관련
     private final JWTUtil jwtUtil;
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final FileIO fileIo;
 
     @Override
-    public String regist(Member member) {
+    public String regist(Member member,  MultipartFile file) throws IOException {
 
         //비번 암호화
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
 
+        //회원가입 할 회원에게 주어질 mmeberid
+        int registIndex = mapper.getMemberIdMax()+1;
+
+        //프로필 정보 파일로 저장
+        String fileName = fileIo.saveUplodedFiles(file, registIndex);
+
+        if(fileName != null)
+        {
+            System.out.println("파일 저장 성공");
+            member.setProfileName(fileName);
+        }
+        else
+            System.out.println("파일 저장 실패");
+
+        System.out.println(fileName);
+
+        //저장한 파일로 프로필 파일 이름 등록
+        Resource res = fileIo.downlodedFile(fileName);
+        if(res == null)
+            System.out.println("파일 불러오기 싪패");
+        else
+            System.out.println("파일 불러오기 성궁"+res);
+
+        member.setProfile(res);
+
         //DB에 저장
         mapper.regist(member);
-
-        member = mapper.findMemberByEmail(member.getEmail());
 
         return jwtUtil.generateToken(member);
     }

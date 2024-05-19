@@ -7,6 +7,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/members")
@@ -18,10 +22,40 @@ public class MemberController {
     //REST API에서 받는 인자는 @RequestBody랑 @PathVariable만 받아도 무방.
 
     //회원가입
+    //@PostMapping("/regist")
+    /*public ResponseEntity<?> regist(@RequestBody Member memberInfo,
+                                    @RequestParam("file") MultipartFile file)*/
+
     @PostMapping("/regist")
-    public ResponseEntity<?> regist(@RequestBody Member memberInfo)
+    public ResponseEntity<?> regist(
+            @RequestPart("file") MultipartFile file,
+            @RequestPart("email") String email,
+            @RequestPart("password") String password,
+            @RequestPart("nickName") String nickName,
+            @RequestPart("region") String region,
+            @RequestPart("food") String food,
+            @RequestPart("birth") String birth,
+            @RequestPart("gender") String gender,
+            @RequestPart("statusMessage") String statusMessage
+            )
     {
-        String token = service.regist(memberInfo);
+        Member memberInfo = new Member();
+        memberInfo.setEmail(email);
+        memberInfo.setPassword(password);
+        memberInfo.setNickName(nickName);
+        memberInfo.setRegion(region);
+        memberInfo.setFood(food);
+        memberInfo.setBirth(birth);
+        memberInfo.setGender(Integer.parseInt(gender));
+        memberInfo.setStatusMessage(statusMessage);
+
+        String token = null;
+        try {
+            token = service.regist(memberInfo, file);
+        }catch(IOException e) {
+            e.printStackTrace();
+        }
+
 
         if(token == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("가입 실패");
