@@ -22,4 +22,7 @@ public interface MemberMapper {
     int updateIncludePassword(Member member);
 
     int updateNotIncludePassword(Member member);
+
+    //회원 인덱스 조회
+    int getMemberIdMax();
 }

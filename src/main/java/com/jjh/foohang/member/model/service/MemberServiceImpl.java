@@ -31,13 +31,11 @@ public class MemberServiceImpl implements MemberService{
         String encodedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encodedPassword);
 
-        //DB에 저장
-        mapper.regist(member);
-
-        member = mapper.findMemberByEmail(member.getEmail());
+        //회원가입 할 회원에게 주어질 mmeberid
+        int registIndex = mapper.getMemberIdMax()+1;
 
         //프로필 정보 파일로 저장
-        String fileName = fileIo.saveUplodedFiles(file, member.getMemberId());
+        String fileName = fileIo.saveUplodedFiles(file, registIndex);
 
         if(fileName != null)
         {
@@ -47,8 +45,9 @@ public class MemberServiceImpl implements MemberService{
         else
             System.out.println("파일 저장 실패");
 
-
         System.out.println(fileName);
+
+        //저장한 파일로 프로필 파일 이름 등록
         Resource res = fileIo.downlodedFile(fileName);
         if(res == null)
             System.out.println("파일 불러오기 싪패");
@@ -56,6 +55,9 @@ public class MemberServiceImpl implements MemberService{
             System.out.println("파일 불러오기 성궁"+res);
 
         member.setProfile(res);
+
+        //DB에 저장
+        mapper.regist(member);
 
         return jwtUtil.generateToken(member);
     }
