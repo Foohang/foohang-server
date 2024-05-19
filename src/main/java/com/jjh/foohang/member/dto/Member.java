@@ -20,5 +20,5 @@ public class Member {
     private String  token;
     private String  statusMessage;
     private String  profileName;
-    private Resource profile;
+    //private Resource profile;
 }
