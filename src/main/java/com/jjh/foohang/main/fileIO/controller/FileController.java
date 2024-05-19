@@ -36,6 +36,4 @@ public class FileController {
 
         return ResponseEntity.ok(res);
     }
-
-
 }
