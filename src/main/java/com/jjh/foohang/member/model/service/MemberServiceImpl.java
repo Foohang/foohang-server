@@ -6,6 +6,7 @@ import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class MemberServiceImpl implements MemberService{
 
     private final MemberMapper mapper;
@@ -80,19 +82,67 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String updateIncludePassword(Member member) {
+    public String updateIncludePassword(Member member, MultipartFile[] file) {
 
         String encodedPassword = mainService.encodeStr(member.getPassword());
         member.setPassword(encodedPassword);
         mapper.updateIncludePassword(member);
         Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+
+        List<String> fileName = null;
+
+        //프로필 정보 파일로 저장
+        try {
+            fileName = mainService.saveUplodedFiles(file, "profile_"+member.getMemberId(), EFileType.PROFILE_IMAGE);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(fileName != null && fileName.size() == 1)
+        {
+            System.out.println("파일 저장 성공");
+            member.setProfileName(fileName.get(0));
+        }
+        else
+            System.out.println("파일 저장 실패");
+
+        System.out.println(fileName);
+
+        String profileName = (fileName == null || fileName.size() == 0) ? defaultProfileImage :  fileName.get(0);
+        member.setProfileName(profileName);
+
         return mainService.getToken(updateUserInfo);
     }
 
     @Override
-    public String updateNotIncludePassword(Member member) {
+    public String updateNotIncludePassword(Member member, MultipartFile[] file) {
         mapper.updateNotIncludePassword(member);
         Member updateUserInfo = mapper.findMemberById(member.getMemberId());
+
+        List<String> fileName = null;
+
+        //프로필 정보 파일로 저장
+        try {
+            fileName = mainService.saveUplodedFiles(file, "profile_"+member.getMemberId(), EFileType.PROFILE_IMAGE);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        if(fileName != null && fileName.size() == 1)
+        {
+            System.out.println("파일 저장 성공");
+            member.setProfileName(fileName.get(0));
+        }
+        else
+            System.out.println("파일 저장 실패");
+
+        System.out.println(fileName);
+
+        String profileName = (fileName == null || fileName.size() == 0) ? defaultProfileImage :  fileName.get(0);
+        member.setProfileName(profileName);
+
         return mainService.getToken(updateUserInfo);
     }
 
