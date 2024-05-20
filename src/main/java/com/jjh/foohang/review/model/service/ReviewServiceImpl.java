@@ -125,7 +125,30 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public int deleteReview(int reviewId) {
+    public int deleteReview(int reviewId){
+
+        Review review = reviewMapper.selectReviewByReviewId(reviewId);
+
+        if(review == null)
+            return -1;
+
+        List<String> fileList = hashTagParse(review.getFiles(), false);
+
+        if(fileList != null)
+        {
+            for(String fileName : fileList)
+            {
+                try {
+                    fileIO.deleteFile(fileName, EFileType.REVIEW_IMAGES);
+                }catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
+
         return reviewMapper.deleteReview(reviewId);
     }
 }

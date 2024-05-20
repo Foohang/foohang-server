@@ -31,6 +31,22 @@
         where member_id = #{memberId}
     </select>
 
+    <!-- 게시글 인덱스로 리뷰 게시글 조회 -->
+    <select id="selectReviewByReviewId" parameterType="int" resultType="review">
+        select
+            review_id,
+            member_id,
+            selected_date,
+            uploaded_date,
+            hashtags,
+            review_title,
+            review_text,
+            selected_emotion,
+            files
+        from review
+        where review_id = #{reviewId}
+    </select>
+
     <!-- 삭제 -->
     <delete id ="deleteReview" parameterType="int">
         delete from review

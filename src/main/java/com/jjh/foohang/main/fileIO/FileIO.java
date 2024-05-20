@@ -91,4 +91,14 @@ public class FileIO {
         return null;
     }
 
+    public void deleteFile(String fileName, EFileType fileType) throws IOException
+    {
+        String filePath = LOCAL_PATH+getAdditionalPath(fileType)+fileName;
+        File file = new File(filePath);
+
+        if(!file.delete())
+            System.out.println(fileName+"삭제 실패!");
+
+    }
+
 }
