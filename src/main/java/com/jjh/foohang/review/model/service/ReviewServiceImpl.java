@@ -23,6 +23,9 @@ public class ReviewServiceImpl implements ReviewService{
 
     private List<String> hashTagParse(String str, boolean isHashTag)
     {
+        if(str == null || str.length() == 0)
+            return null;
+
         // 문자열을 '#' 기준으로 분할 (빈 문자열 제거)
         String[] parts = str.split("#");
         List<String> fileList = new ArrayList<>();
@@ -100,14 +103,19 @@ public class ReviewServiceImpl implements ReviewService{
             List<String> hashtags = hashTagParse(review.getHashtags(), true);
             List<String> files = hashTagParse(review.getFiles(), false);
 
+            if(hashtags != null)
+                srr.setHashtags(hashtags);
+
             //파일
-            String url = "http://localhost/files/";
+            if(files != null)
+            {
+                String url = "http://localhost/files/";
 
-            for(int i = 0; i<files.size(); i++)
-                files.set(i, url+files.get(i));
+                for(int i = 0; i<files.size(); i++)
+                    files.set(i, url+files.get(i));
 
-            srr.setHashtags(hashtags);
-            srr.setImages(files);
+                srr.setImages(files);
+            }
 
             reviewResponseList.add(srr);
         }
