@@ -21,12 +21,21 @@ import java.io.IOException;
 public class FileController {
 
     private final FileIO fileIo;
-    @GetMapping("/{fileName}")
-    public ResponseEntity<?>downloadFile(@PathVariable String fileName)
+    @GetMapping("/{fileType}/{fileName}")
+    public ResponseEntity<?>downloadFile(@PathVariable String fileName, @PathVariable String fileType)
     {
+        EFileType eFileType;
+
+        if(fileType == "profile")
+            eFileType = EFileType.PROFILE_IMAGE;
+        else if(fileType == "review")
+            eFileType = EFileType.REVIEW_IMAGES;
+        else
+            eFileType =EFileType.UNDEFINED;
+
         Resource res = null;
         try{
-            res = fileIo.downlodedFile(fileName, EFileType.PROFILE_IMAGE);
+            res = fileIo.downlodedFile(fileName, eFileType);
         }catch(IOException e){
             e.printStackTrace();
         }
