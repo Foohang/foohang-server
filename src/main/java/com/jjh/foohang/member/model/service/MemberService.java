@@ -18,7 +18,7 @@ public interface MemberService{
     Member findMemberById(int id);
 
     //회원 정보 수정하기
-    String updateIncludePassword(Member member);
+    String updateIncludePassword(Member member, MultipartFile[] file);
 
-    String updateNotIncludePassword(Member member);
+    String updateNotIncludePassword(Member member, MultipartFile[] file);
 }

@@ -81,8 +81,17 @@ public class MemberController {
     //회원 정보 수정
 
 
+
     @PutMapping("/")
-    public ResponseEntity<?> update(@RequestBody Member updateInfo,
+    public ResponseEntity<?> update(
+            @RequestPart(value = "file", required = false) MultipartFile[] file,
+                                    @RequestPart("password") String password,
+                                    @RequestPart("nickName") String nickName,
+                                    @RequestPart("region") String region,
+                                    @RequestPart("food") String food,
+                                    @RequestPart("birth") String birth,
+                                    @RequestPart("gender") int gender,
+                                    @RequestPart("statusMessage") String statusMessage,
                                     @RequestHeader("Authorization") String tokenHeader)
     {
         //id값으로 회원 정보 가져오기
@@ -92,18 +101,19 @@ public class MemberController {
         if(member == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("토큰 안맞음");
 
-        member.setPassword(updateInfo.getPassword());
-        member.setNickName(updateInfo.getNickName());
-        member.setRegion(updateInfo.getRegion());
-        member.setFood(updateInfo.getFood());
-        member.setBirth(updateInfo.getBirth());
-        member.setGender(updateInfo.getGender());
+        member.setPassword(password);
+        member.setNickName(nickName);
+        member.setRegion(region);
+        member.setFood(food);
+        member.setBirth(birth);
+        member.setGender(gender);
+        member.setStatusMessage(statusMessage);
 
         String updateToken = "";
         if(member.getPassword().equals(""))
-            updateToken = service.updateNotIncludePassword(member);
+            updateToken = service.updateNotIncludePassword(member, file);
         else
-            updateToken = service.updateIncludePassword(member);
+            updateToken = service.updateIncludePassword(member, file);
 
         System.out.println(updateToken);
 

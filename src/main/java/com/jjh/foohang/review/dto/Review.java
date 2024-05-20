@@ -13,6 +13,6 @@ public class Review {
     private String  reviewTitle;        // 제목
     private String  reviewText;         // 리뷰
     private String  files;              // n개 이상의 파일명 통짜문자열
-    private int  selectedEmotion;       // 0: 설정 없음
+    private int     selectedEmotion;       // 0: 설정 없음
 
 }
