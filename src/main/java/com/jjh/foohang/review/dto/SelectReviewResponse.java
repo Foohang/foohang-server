@@ -6,6 +6,7 @@ import java.util.List;
 
 @Data
 public class SelectReviewResponse {
+    private int             reviewId;
     private String          title;
     private String          postDate;
     private String          travelDate;

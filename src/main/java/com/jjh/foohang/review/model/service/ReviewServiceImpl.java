@@ -91,6 +91,7 @@ public class ReviewServiceImpl implements ReviewService{
         {
             SelectReviewResponse srr = new SelectReviewResponse();
 
+            srr.setReviewId(review.getReviewId());
             srr.setTitle(review.getReviewTitle());
             srr.setPostDate(review.getUploadedDate());
             srr.setTravelDate(review.getSelectedDate());
@@ -109,7 +110,7 @@ public class ReviewServiceImpl implements ReviewService{
             //파일
             if(files != null)
             {
-                String url = "http://localhost/files/";
+                String url = "http://localhost/files/review/";
 
                 for(int i = 0; i<files.size(); i++)
                     files.set(i, url+files.get(i));
