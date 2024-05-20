@@ -21,7 +21,8 @@ public class JWTUtil {
     @Value("${jwt.secret-key}")
     private String secretKeyPlain;
 
-    private final long EXPIRATION_SECONDS = 60 * 60;	//1시간
+    //private final long EXPIRATION_SECONDS = 60 * 60 ;//1시간
+    private final long EXPIRATION_SECONDS = 60 * 60 * 24;	//24시간
 
     //application.properties에 등록된 변수
     public SecretKey getSecretKey() {

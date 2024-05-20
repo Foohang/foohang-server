@@ -12,16 +12,20 @@ import java.util.List;
 //공통으로 쓸 기능들 모아놓은 서비스
 public interface MainService {
 
-    //인증확인
+    //=========== 인증토큰 ==================
+    String getToken(Member member);
+
     Member checkUser(String token);
 
     String encodeStr(String str);
 
     boolean passwordCompare(String p1, String p2);
 
+
+    //===========파일 ==================
     List<String> saveUplodedFiles(MultipartFile[] files, String prefix, EFileType fileType) throws IOException;
 
     Resource downlodedFile(String fileName, EFileType fileType) throws IOException;
 
-    String getToken(Member member);
+    void deleteFile(String fileName, EFileType fileType) throws IOException;
 }

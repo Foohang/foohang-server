@@ -59,6 +59,11 @@ public class MainServiceImpl implements MainService
     }
 
     @Override
+    public void deleteFile(String fileName, EFileType fileType) throws IOException {
+        fileIo.deleteFile(fileName, fileType);
+    }
+
+    @Override
     public String getToken(Member member) {
         return jwtUtil.generateToken(member);
     }
