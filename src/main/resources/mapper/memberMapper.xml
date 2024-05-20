@@ -29,13 +29,13 @@
 
     <!-- 회원 정보 수정 #1. 비밀번호 포함 변경-->
     <update id="updateIncludePassword" parameterType="member">
-        update member set password=#{password}, nick_name=#{nickName}, region=#{region}, food=#{food}, birth=#{birth}, gender=#{gender}, status_message=#{statusMessage}
+        update member set password=#{password}, nick_name=#{nickName}, region=#{region}, food=#{food}, birth=#{birth}, gender=#{gender}, status_message=#{statusMessage}, profile_name = #{profileName}
         where member_id = #{memberId}
     </update>
 
     <!-- 회원 정보 수정 #1. 비밀번호 포함하지 않고 변경-->
     <update id="updateNotIncludePassword" parameterType="member">
-        update member set nick_name=#{nickName}, region=#{region}, birth=#{birth}, food=#{food}, gender=#{gender}, status_message=#{statusMessage}
+        update member set nick_name=#{nickName}, region=#{region}, birth=#{birth}, food=#{food}, gender=#{gender}, status_message=#{statusMessage}, profile_name = #{profileName}
         where member_id = #{memberId}
     </update>
 
