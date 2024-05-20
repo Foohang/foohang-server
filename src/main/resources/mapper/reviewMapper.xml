@@ -30,4 +30,11 @@
         from review
         where member_id = #{memberId}
     </select>
+
+    <!-- 삭제 -->
+    <delete id ="deleteReview" parameterType="int">
+        delete from review
+        where review_id=#{reviewId}
+    </delete>
+
 </mapper>

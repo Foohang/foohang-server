@@ -1,13 +1,11 @@
 package com.jjh.foohang.member.model.service;
 
 import com.jjh.foohang.main.fileIO.EFileType;
-import com.jjh.foohang.main.fileIO.FileIO;
-import com.jjh.foohang.main.jwtUtil.JWTUtil;
+import com.jjh.foohang.main.service.MainService;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,11 +17,7 @@ import java.util.List;
 public class MemberServiceImpl implements MemberService{
 
     private final MemberMapper mapper;
-
-    //인증 토큰 관련
-    private final JWTUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    private final FileIO fileIo;
+    private final MainService mainService;
 
     private final String defaultProfileImage = "default.png";
 
@@ -31,7 +25,7 @@ public class MemberServiceImpl implements MemberService{
     public String regist(Member member,  MultipartFile[] file) throws IOException {
 
         //비번 암호화
-        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        String encodedPassword = mainService.encodeStr(member.getPassword());
         member.setPassword(encodedPassword);
 
         //회원가입 할 회원에게 주어질 mmeberid
@@ -39,7 +33,7 @@ public class MemberServiceImpl implements MemberService{
         member.setMemberId(registIndex);
 
         //프로필 정보 파일로 저장
-        List<String> fileName = fileIo.saveUplodedFiles(file, "profile_"+registIndex, EFileType.PROFILE_IMAGE);
+        List<String> fileName = mainService.saveUplodedFiles(file, "profile_"+registIndex, EFileType.PROFILE_IMAGE);
 
         if(fileName != null && fileName.size() == 1)
         {
@@ -65,7 +59,7 @@ public class MemberServiceImpl implements MemberService{
         //DB에 저장
         mapper.regist(member);
 
-        return jwtUtil.generateToken(member);
+        return mainService.getToken(member);
     }
 
     @Override
@@ -73,10 +67,10 @@ public class MemberServiceImpl implements MemberService{
 
         Member m = mapper.login(member);
         System.out.println("서비스 멤버 정보 :"+m);
-        if(m == null || !passwordEncoder.matches(member.getPassword(),m.getPassword()))
+        if(m == null || !mainService.passwordCompare(member.getPassword(),m.getPassword()))
             return null;
 
-        return jwtUtil.generateToken(m);
+        return mainService.getToken(m);
     }
 
     @Override
@@ -88,18 +82,18 @@ public class MemberServiceImpl implements MemberService{
     @Override
     public String updateIncludePassword(Member member) {
 
-        String encodedPassword = passwordEncoder.encode(member.getPassword());
+        String encodedPassword = mainService.encodeStr(member.getPassword());
         member.setPassword(encodedPassword);
         mapper.updateIncludePassword(member);
         Member updateUserInfo = mapper.findMemberById(member.getMemberId());
-        return jwtUtil.generateToken(updateUserInfo);
+        return mainService.getToken(updateUserInfo);
     }
 
     @Override
     public String updateNotIncludePassword(Member member) {
         mapper.updateNotIncludePassword(member);
         Member updateUserInfo = mapper.findMemberById(member.getMemberId());
-        return jwtUtil.generateToken(updateUserInfo);
+        return mainService.getToken(updateUserInfo);
     }
 
 }

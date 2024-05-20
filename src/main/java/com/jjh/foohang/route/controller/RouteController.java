@@ -1,12 +1,14 @@
 package com.jjh.foohang.route.controller;
 
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
+import com.jjh.foohang.main.service.MainService;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
 import com.jjh.foohang.route.dto.Trail;
 import com.jjh.foohang.route.dto.Travel;
 import com.jjh.foohang.route.model.service.RouteService;
 import com.jjh.foohang.spot.dto.Spot;
+import com.sun.tools.javac.Main;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,27 +22,14 @@ import java.util.List;
 public class RouteController {
 
     private final RouteService routeService;
-    private final MemberService memberService;
-    private final JWTUtil jwtUtil;
-
-    private Member checkUser(String token)
-    {
-        int memberId = jwtUtil.getMemberIdFromToken(token.substring(7));
-
-        Member authMember = memberService.findMemberById(memberId);
-
-        if(authMember == null)
-            return null;
-
-        return authMember;
-    }
+    private final MainService mainService;
 
     //최적 경로 생성
     @PostMapping("/recommendation")
     public ResponseEntity<?> recommendation(@RequestBody List<Spot> spotList
                     , @RequestHeader("Authorization") String tokenHeader)
     {
-        Member authMember = checkUser(tokenHeader);
+        Member authMember = mainService.checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 정보가 존재하지 않습니다.");
@@ -58,7 +47,7 @@ public class RouteController {
                                       @PathVariable String startDate,
                                       @PathVariable String endDate)
     {
-        Member authMember = checkUser(tokenHeader);
+        Member authMember = mainService.checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
@@ -74,7 +63,7 @@ public class RouteController {
     @GetMapping("/")
     public ResponseEntity<?>  findTravelByMemberId(@RequestHeader("Authorization") String tokenHeader)
     {
-        Member authMember = checkUser(tokenHeader);
+        Member authMember = mainService.checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
@@ -92,7 +81,7 @@ public class RouteController {
     @GetMapping("/{travelId}")
     public ResponseEntity<?> findTrailListByTravelId(@RequestHeader("Authorization") String tokenHeader,@PathVariable int travelId)
     {
-        Member authMember = checkUser(tokenHeader);
+        Member authMember = mainService.checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
@@ -109,7 +98,7 @@ public class RouteController {
     @DeleteMapping("/{travelId}")
     public ResponseEntity<?> deleteTravelByTravelId(@RequestHeader("Authorization") String tokenHeader,@PathVariable int travelId)
     {
-        Member authMember = checkUser(tokenHeader);
+        Member authMember = mainService.checkUser(tokenHeader);
 
         if(authMember == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");

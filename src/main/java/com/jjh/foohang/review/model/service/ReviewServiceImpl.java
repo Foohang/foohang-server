@@ -123,4 +123,9 @@ public class ReviewServiceImpl implements ReviewService{
 
         return reviewResponseList;
     }
+
+    @Override
+    public int deleteReview(int reviewId) {
+        return reviewMapper.deleteReview(reviewId);
+    }
 }
