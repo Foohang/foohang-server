@@ -14,4 +14,20 @@
     <select id="getReviewIdMax" resultType="int">
         select MAX(review_id) from review;
     </select>
+
+    <!-- 회원id로 리뷰 게시글 조회 -->
+    <select id="selectReviewByMemberId" parameterType="int" resultType="review">
+        select
+            review_id,
+            member_id,
+            selected_date,
+            uploaded_date,
+            hashtags,
+            review_title,
+            review_text,
+            selected_emotion,
+            files
+        from review
+        where member_id = #{memberId}
+    </select>
 </mapper>
