@@ -19,6 +19,7 @@ public class FileIO {
 
     @Value("${file.upload.directory}")
     private String LOCAL_PATH;
+    private final String NO_IMAGE = "noImage.jpg";
 
     private String getAdditionalPath(EFileType fileType)
     {
@@ -76,8 +77,9 @@ public class FileIO {
             Path filePath = Paths.get(LOCAL_PATH+getAdditionalPath(fileType)).resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());
 
+            //이미지가 존재하지 않음
             if(!resource.exists())
-                return null;
+                resource = new UrlResource(Paths.get(LOCAL_PATH, NO_IMAGE).toUri());
 
             return resource;
 
