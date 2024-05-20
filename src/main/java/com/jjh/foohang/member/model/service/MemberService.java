@@ -1,11 +1,12 @@
 package com.jjh.foohang.member.model.service;
 
+import com.jjh.foohang.main.service.MainService;
 import com.jjh.foohang.member.dto.Member;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
-public interface MemberService {
+public interface MemberService{
 
     //회원 가입
     String regist(Member member, MultipartFile[] file) throws IOException;
@@ -16,7 +17,6 @@ public interface MemberService {
     //회원 정보 id값으로 찾기
     Member findMemberById(int id);
 
-    //회원 정보 수정하기
     //회원 정보 수정하기
     String updateIncludePassword(Member member);
 

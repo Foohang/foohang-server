@@ -1,6 +1,7 @@
 package com.jjh.foohang.member.controller;
 
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
+import com.jjh.foohang.main.service.MainService;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService service;
-    private final JWTUtil jwtUtil;
+    private final MainService mainService;
 
     //REST API에서 받는 인자는 @RequestBody랑 @PathVariable만 받아도 무방.
 
@@ -85,24 +86,11 @@ public class MemberController {
                                     @RequestHeader("Authorization") String tokenHeader)
     {
         //id값으로 회원 정보 가져오기
-        Member member = service.findMemberById(updateInfo.getMemberId());
+        Member member =mainService.checkUser(tokenHeader);
 
         //회원정보가 존재하는지 체크
         if(member == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("회원정보 없음");
-
-
-        //회원과 토큰정보가 일치하는지 체크
-
-        //"Baerer "를 제외한 토큰
-        //int memberId = Integer.parseInt(jwtUtil.getIdFromToken(tokenHeader.substring(7)));
-        int memberId = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
-        //System.out.println(memberId);
-
-        //토큰정보 일치한지 비교
-        if(member.getMemberId() != memberId)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 토큰이 일치하지 않습니다.");
-
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("토큰 안맞음");
 
         member.setPassword(updateInfo.getPassword());
         member.setNickName(updateInfo.getNickName());

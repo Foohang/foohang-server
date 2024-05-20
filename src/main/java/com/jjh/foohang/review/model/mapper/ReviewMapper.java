@@ -17,4 +17,7 @@ public interface ReviewMapper {
 
     //리뷰 조회
     List<Review> selectReviewByMemberId(int memberId);
+
+    //리뷰 삭제
+    int deleteReview(int reviewId);
 }

@@ -1,9 +1,11 @@
 package com.jjh.foohang.main.jwtUtil;
 
 import com.jjh.foohang.member.dto.Member;
+import com.jjh.foohang.member.model.service.MemberService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -13,6 +15,7 @@ import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
+@RequiredArgsConstructor
 @Slf4j
 public class JWTUtil {
     @Value("${jwt.secret-key}")

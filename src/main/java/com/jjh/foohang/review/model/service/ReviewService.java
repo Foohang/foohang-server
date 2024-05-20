@@ -13,4 +13,7 @@ public interface ReviewService {
 
     //리뷰 조회
     List<SelectReviewResponse> selectReviewByMemberId(int memberId);
+
+    //리뷰 삭제
+    int deleteReview(int reviewId);
 }

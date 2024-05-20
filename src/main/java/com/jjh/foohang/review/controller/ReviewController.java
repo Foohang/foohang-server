@@ -1,6 +1,7 @@
 package com.jjh.foohang.review.controller;
 
 import com.jjh.foohang.main.jwtUtil.JWTUtil;
+import com.jjh.foohang.main.service.MainService;
 import com.jjh.foohang.member.dto.Member;
 import com.jjh.foohang.member.model.service.MemberService;
 import com.jjh.foohang.review.dto.Review;
@@ -20,8 +21,7 @@ import java.util.List;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final MemberService memberService;
-    private final JWTUtil jwtUtil;
+    private final MainService mainService;
 
     //게시글 등록
     @PostMapping("/")
@@ -42,16 +42,15 @@ public class ReviewController {
             @RequestHeader("Authorization") String tokenHeader
     )
     {
-        //인증
-        int idToken = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
+        //==================Authorization==================
+        Member authMember = mainService.checkUser(tokenHeader);
 
-        int memberId = memberService.findMemberById(idToken).getMemberId();
-
-        if(memberId != idToken)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 토큰이 일치하지 않습니다.");
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+        //==================Authorization==================
 
         Review review = new Review();
-        review.setMemberId(memberId);
+        review.setMemberId(authMember.getMemberId());
         review.setSelectedDate(selectedDate);
         review.setUploadedDate(uploadedDate);
         review.setHashtags(hashtags);
@@ -67,23 +66,42 @@ public class ReviewController {
         return ResponseEntity.ok().build();
     }
 
-
+    //게시글 등록
     @GetMapping("/")
     public ResponseEntity<?> addReview(@RequestHeader("Authorization") String tokenHeader)
     {
-        //인증
-        int idToken = jwtUtil.getMemberIdFromToken(tokenHeader.substring(7));
+        //==================Authorization==================
+        Member authMember = mainService.checkUser(tokenHeader);
 
-        int memberId = memberService.findMemberById(idToken).getMemberId();
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+        //==================Authorization==================
 
-        if(memberId != idToken)
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("id 토큰이 일치하지 않습니다.");
-
-        List<SelectReviewResponse> reviewList = reviewService.selectReviewByMemberId(memberId);
+        List<SelectReviewResponse> reviewList = reviewService.selectReviewByMemberId(authMember.getMemberId());
 
         if(reviewList == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("리뷰가 없거나 조회가 안됏읍니다");
 
         return ResponseEntity.ok(reviewList);
+    }
+
+    //게시글 삭제
+    @DeleteMapping("/{reviewId}")
+    public ResponseEntity<?> deleteReview(@PathVariable int reviewId,
+                                          @RequestHeader("Authorization") String tokenHeader)
+    {
+        //==================Authorization==================
+        Member authMember = mainService.checkUser(tokenHeader);
+
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+        //==================Authorization==================
+
+        int isDelete = reviewService.deleteReview(reviewId);
+        if(isDelete != 1)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패!");
+
+        System.out.println("reviewId :"+reviewId +" 삭제 성공");
+        return ResponseEntity.ok().build();
     }
 }
