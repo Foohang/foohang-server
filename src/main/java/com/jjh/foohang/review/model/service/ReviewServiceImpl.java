@@ -151,4 +151,60 @@ public class ReviewServiceImpl implements ReviewService{
 
         return reviewMapper.deleteReview(reviewId);
     }
+
+    @Override
+    public int updateReview(Review review, MultipartFile[] files) {
+
+        Review oldReview = reviewMapper.selectReviewByReviewId(review.getReviewId());
+
+        if(oldReview == null)
+        {
+            System.out.println("해당 리뷰 없음");
+            return -1;
+        }
+
+        List<String> fileList = hashTagParse(oldReview.getFiles(), false);
+
+        if(fileList != null)
+        {
+            for(String fileName : fileList)
+            {
+                try {
+                    fileIO.deleteFile(fileName, EFileType.REVIEW_IMAGES);
+                }catch(IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        System.out.println("기존 파일 삭제 성공");
+
+        if(fileList != null)
+            fileList.clear();
+
+        //새 파일 등록
+        try {
+            fileList = fileIO.saveUplodedFiles(files, "file_"+review.getReviewId(), EFileType.REVIEW_IMAGES);
+        }catch(IOException e)
+        {
+            e.printStackTrace();
+        }
+
+        String fileFullName = null;
+        if(fileList != null)
+        {
+            if(fileList.size() > 0)
+            {
+                fileFullName = "";
+
+                for (String fileName : fileList)
+                    fileFullName += "#"+fileName;
+            }
+        }
+        review.setFiles(fileFullName);
+
+        ;
+
+        return reviewMapper.updateReview(review);
+    }
 }

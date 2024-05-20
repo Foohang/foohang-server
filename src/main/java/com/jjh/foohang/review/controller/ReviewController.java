@@ -32,12 +32,6 @@ public class ReviewController {
             @RequestParam("reviewTitle") String reviewTitle,
             @RequestParam("reviewText") String reviewText,
             @RequestParam("selectedEmotion") int selectedEmotion,
-            //@RequestParam(value = "file_1", required = false) MultipartFile[] file1,
-            //@RequestParam(value = "file_2", required = false) MultipartFile[] file2,
-            //@RequestParam(value = "file_3", required = false) MultipartFile[] file3,
-            //@RequestParam(value = "file_4", required = false) MultipartFile[] file4,
-            //@RequestParam(value = "file_5", required = false) MultipartFile[] file5,
-            //@RequestParam(value = "file_6", required = false) MultipartFile[] file6,
             @RequestParam(value = "files", required = false) MultipartFile[] files,
             @RequestHeader("Authorization") String tokenHeader
     )
@@ -102,6 +96,43 @@ public class ReviewController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제 실패!");
 
         System.out.println("reviewId :"+reviewId +" 삭제 성공");
+        return ResponseEntity.ok().build();
+    }
+
+    //게시글 수정
+    @PutMapping("/{reviewId}")
+    public ResponseEntity<?> updateReview(@PathVariable int reviewId,
+                                          @RequestParam("selectedDate") String selectedDate,
+                                          @RequestParam("uploadedDate") String uploadedDate,
+                                          @RequestParam("hashtags") String hashtags,
+                                          @RequestParam("reviewTitle") String reviewTitle,
+                                          @RequestParam("reviewText") String reviewText,
+                                          @RequestParam("selectedEmotion") int selectedEmotion,
+                                          @RequestParam(value = "files", required = false) MultipartFile[] files,
+                                          @RequestHeader("Authorization") String tokenHeader)
+    {
+        //==================Authorization==================
+        Member authMember = mainService.checkUser(tokenHeader);
+
+        if(authMember == null)
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("id 토큰이 일치하지 않습니다.");
+        //==================Authorization==================
+
+        Review review = new Review();
+        review.setReviewId(reviewId);
+        review.setSelectedDate(selectedDate);
+        review.setUploadedDate(uploadedDate);
+        review.setHashtags(hashtags);
+        review.setReviewTitle(reviewTitle);
+        review.setReviewText(reviewText);
+        review.setSelectedEmotion(selectedEmotion);
+
+
+        int res = reviewService.updateReview(review, files);
+
+        if(res != 1)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("수정 실패");
+
         return ResponseEntity.ok().build();
     }
 }
