@@ -53,4 +53,17 @@
         where review_id=#{reviewId}
     </delete>
 
+    <!-- 수정 -->
+    <update id="updateReview" parameterType="review">
+        update review set
+                          selected_date = #{selectedDate},
+                          uploaded_date = #{uploadedDate},
+                          hashtags = #{hashtags},
+                          review_title = #{reviewTitle},
+                          review_text = #{reviewText},
+                          files = #{files},
+                          selected_emotion = #{selectedEmotion}
+        where review_id = #{reviewId}
+    </update>
+
 </mapper>

@@ -17,4 +17,7 @@ public interface ReviewService {
 
     //리뷰 삭제
     int deleteReview(int reviewId);
+
+    //리뷰 수정
+    int updateReview(Review reviewResponse, MultipartFile[] files);
 }
