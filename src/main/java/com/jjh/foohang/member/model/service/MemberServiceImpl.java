@@ -36,9 +36,10 @@ public class MemberServiceImpl implements MemberService{
 
         //회원가입 할 회원에게 주어질 mmeberid
         int registIndex = mapper.getMemberIdMax()+1;
+        member.setMemberId(registIndex);
 
         //프로필 정보 파일로 저장
-        List<String> fileName = fileIo.saveUplodedFiles(file, "profile"+member.getMemberId(), EFileType.PROFILE_IMAGE);
+        List<String> fileName = fileIo.saveUplodedFiles(file, "profile_"+registIndex, EFileType.PROFILE_IMAGE);
 
         if(fileName != null && fileName.size() == 1)
         {

@@ -25,15 +25,19 @@ public class ReviewServiceImpl implements ReviewService{
     {
         // 문자열을 '#' 기준으로 분할 (빈 문자열 제거)
         String[] parts = str.split("#");
+        List<String> fileList = new ArrayList<>();
+        for(String part : parts)
+        {
+            part = part.trim();
 
-        // 빈 문자열 제거를 위해 필터링
-        List<String> fileList = Arrays.stream(parts)
-                .filter(s -> !s.isEmpty())
-                .toList();
+            if(part.equals(""))
+                continue;
 
-        if(isHashTag)
-            for(int i = 0; i<fileList.size(); i++)
-                fileList.set(i, '#'+fileList.get(i));
+            if(isHashTag)
+                part = "#"+part;
+
+            fileList.add(part);
+        }
 
         // 결과 출력
         System.out.println(fileList);
@@ -89,6 +93,9 @@ public class ReviewServiceImpl implements ReviewService{
             srr.setTravelDate(review.getSelectedDate());
             srr.setContent(review.getReviewText());
             srr.setSelectedEmotion(review.getSelectedEmotion());
+
+            String hashTag = review.getHashtags();
+            System.out.println(hashTag);
 
             List<String> hashtags = hashTagParse(review.getHashtags(), true);
             List<String> files = hashTagParse(review.getFiles(), false);
