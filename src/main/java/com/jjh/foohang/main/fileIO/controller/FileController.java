@@ -26,9 +26,9 @@ public class FileController {
     {
         EFileType eFileType;
 
-        if(fileType == "profile")
+        if(fileType.equals("profile"))
             eFileType = EFileType.PROFILE_IMAGE;
-        else if(fileType == "review")
+        else if(fileType.equals("review"))
             eFileType = EFileType.REVIEW_IMAGES;
         else
             eFileType =EFileType.UNDEFINED;
