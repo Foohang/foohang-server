@@ -84,14 +84,14 @@ public class MemberController {
 
     @PutMapping("/")
     public ResponseEntity<?> update(
-            @RequestPart(value = "file", required = false) MultipartFile[] file,
-                                    @RequestPart("password") String password,
-                                    @RequestPart("nickName") String nickName,
-                                    @RequestPart("region") String region,
-                                    @RequestPart("food") String food,
-                                    @RequestPart("birth") String birth,
-                                    @RequestPart("gender") int gender,
-                                    @RequestPart("statusMessage") String statusMessage,
+            @RequestParam(value = "profile", required = false) MultipartFile[] file,
+                                    @RequestParam("password") String password,
+                                    @RequestParam("nickName") String nickName,
+                                    @RequestParam("region") String region,
+                                    @RequestParam("food") String food,
+                                    @RequestParam("birth") String birth,
+                                    @RequestParam("gender") int gender,
+                                    @RequestParam("statusMessage") String statusMessage,
                                     @RequestHeader("Authorization") String tokenHeader)
     {
         //id값으로 회원 정보 가져오기
@@ -101,7 +101,6 @@ public class MemberController {
         if(member == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("토큰 안맞음");
 
-        member.setPassword(password);
         member.setNickName(nickName);
         member.setRegion(region);
         member.setFood(food);
@@ -110,10 +109,14 @@ public class MemberController {
         member.setStatusMessage(statusMessage);
 
         String updateToken = "";
-        if(member.getPassword().equals(""))
-            updateToken = service.updateNotIncludePassword(member, file);
+
+        if(!password.equals(""))
+        {
+            member.setPassword(password);
+            updateToken = service.updateMember(member, file, true);
+        }
         else
-            updateToken = service.updateIncludePassword(member, file);
+            updateToken = service.updateMember(member, file, false);
 
         System.out.println(updateToken);
 

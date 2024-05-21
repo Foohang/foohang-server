@@ -19,9 +19,7 @@ public interface MemberMapper {
     Member findMemberByEmail(String email);
 
     //회원 정보 수정하기
-    int updateIncludePassword(Member member);
-
-    int updateNotIncludePassword(Member member);
+    int updateMember(Member member);
 
     //회원 인덱스 조회
     int getMemberIdMax();
