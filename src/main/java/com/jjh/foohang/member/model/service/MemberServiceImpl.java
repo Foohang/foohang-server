@@ -82,13 +82,19 @@ public class MemberServiceImpl implements MemberService{
     }
 
     @Override
-    public String updateIncludePassword(Member member, MultipartFile[] file) {
+    public String updateMember(Member member, MultipartFile[] file, boolean isPasswordChanged) {
 
-        String encodedPassword = mainService.encodeStr(member.getPassword());
-        member.setPassword(encodedPassword);
-        mapper.updateIncludePassword(member);
         Member updateUserInfo = mapper.findMemberById(member.getMemberId());
 
+        //일반 정보
+        updateUserInfo.setNickName(member.getNickName());
+        updateUserInfo.setRegion(member.getRegion());
+        updateUserInfo.setFood(member.getFood());
+        updateUserInfo.setBirth(member.getBirth());
+        updateUserInfo.setGender(member.getGender());
+        updateUserInfo.setStatusMessage(member.getStatusMessage());
+
+        //프로필 사진
         List<String> fileName = null;
 
         //프로필 정보 파일로 저장
@@ -97,6 +103,7 @@ public class MemberServiceImpl implements MemberService{
         }catch(Exception e)
         {
             e.printStackTrace();
+            System.out.println("e = " + e);
         }
 
         if(fileName != null && fileName.size() == 1)
@@ -105,45 +112,36 @@ public class MemberServiceImpl implements MemberService{
             member.setProfileName(fileName.get(0));
         }
         else
+        {
             System.out.println("파일 저장 실패");
 
+        }
         System.out.println(fileName);
 
-        String profileName = (fileName == null || fileName.size() == 0) ? defaultProfileImage :  fileName.get(0);
-        member.setProfileName(profileName);
+        String profileName = updateUserInfo.getProfileName();
+
+        if(fileName == null || fileName.size() == 0)
+        {
+            if(profileName.equals(null) || profileName.equals(""))
+                profileName = defaultProfileImage;
+        }else
+            profileName = fileName.get(0);
+
+        updateUserInfo.setProfileName(profileName);
+
+        //비밀번호
+        if(isPasswordChanged)
+        {
+            String encodedPassword = mainService.encodeStr(member.getPassword());
+
+            System.out.println("인코딩된 비번 비교 = " + encodedPassword);
+            mainService.passwordCompare(member.getPassword(),encodedPassword);
+
+            updateUserInfo.setPassword(encodedPassword);
+        }
+
+        mapper.updateMember(updateUserInfo);
 
         return mainService.getToken(updateUserInfo);
     }
-
-    @Override
-    public String updateNotIncludePassword(Member member, MultipartFile[] file) {
-        mapper.updateNotIncludePassword(member);
-        Member updateUserInfo = mapper.findMemberById(member.getMemberId());
-
-        List<String> fileName = null;
-
-        //프로필 정보 파일로 저장
-        try {
-            fileName = mainService.saveUplodedFiles(file, "profile_"+member.getMemberId(), EFileType.PROFILE_IMAGE);
-        }catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        if(fileName != null && fileName.size() == 1)
-        {
-            System.out.println("파일 저장 성공");
-            member.setProfileName(fileName.get(0));
-        }
-        else
-            System.out.println("파일 저장 실패");
-
-        System.out.println(fileName);
-
-        String profileName = (fileName == null || fileName.size() == 0) ? defaultProfileImage :  fileName.get(0);
-        member.setProfileName(profileName);
-
-        return mainService.getToken(updateUserInfo);
-    }
-
 }
