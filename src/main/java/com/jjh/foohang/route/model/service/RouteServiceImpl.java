@@ -8,9 +8,7 @@ import com.jjh.foohang.spot.model.mapper.SpotMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,16 +76,17 @@ public class RouteServiceImpl implements RouteService{
         return region;
     }
 
+
     @Override
     public List<Spot> shortestPath(List<Spot> spotList) {
 
         //TODO:: 여기에 최단 경로 알고리즘이 들어감
-
+        TravelPlanner planner = new TravelPlanner();
+        List<Spot> optimizedRoute = planner.shortestPath(spotList);
         //==================================
 
         //임시로 contentId 내림차순으로 정렬
-        Collections.sort(spotList, (Spot o1, Spot o2) -> Integer.compare(o2.getContentId(), o1.getContentId()));
-        return spotList;
+        return optimizedRoute;
     }
 
     @Override
@@ -212,5 +211,115 @@ public class RouteServiceImpl implements RouteService{
     @Override
     public int deleteTravelByTravelId(int travelId) {
         return routeMapper.deleteTravelByTravelId(travelId);
+    }
+
+    public class TravelPlanner {
+        public List<Spot> shortestPath(List<Spot> spotList) {
+            // Step 1: Determine the starting point
+            Spot start = null;
+            for (Spot spot : spotList) {
+                if (spot.getMainAccommodations() == 1) {
+                    start = spot;
+                    break;
+                }
+            }
+            if (start == null) {
+                for (Spot spot : spotList) {
+                    if (spot.getContentTypeId() == 32) {
+                        start = spot;
+                        break;
+                    }
+                }
+            }
+            if (start == null) {
+                start = spotList.get(0);
+            }
+
+            // Step 2: Separate spots by meal type and other criteria
+            List<Spot> breakfastSpots = new ArrayList<>();
+            List<Spot> lunchSpots = new ArrayList<>();
+            List<Spot> dinnerSpots = new ArrayList<>();
+            List<Spot> otherSpots = new ArrayList<>();
+
+            for (Spot spot : spotList) {
+                if (spot.getMealType() == 1) {
+                    breakfastSpots.add(spot);
+                } else if (spot.getMealType() == 2) {
+                    lunchSpots.add(spot);
+                } else if (spot.getMealType() == 3) {
+                    dinnerSpots.add(spot);
+                } else {
+                    otherSpots.add(spot);
+                }
+            }
+
+            // Step 3: Create the ordered list
+            List<Spot> orderedSpots = new ArrayList<>();
+            orderedSpots.add(start);
+
+            // Add lunch spots first
+            orderedSpots.addAll(lunchSpots);
+            // Add dinner spots
+            orderedSpots.addAll(dinnerSpots);
+            // Add breakfast spots
+            orderedSpots.addAll(breakfastSpots);
+
+            // Step 4: Add other spots in the optimal order to minimize distance
+            for (Spot spot : otherSpots) {
+                if (!orderedSpots.contains(spot)) {
+                    orderedSpots.add(spot);
+                }
+            }
+
+            // Step 5: Optimize the route to minimize travel distance
+            orderedSpots = optimizeRoute(orderedSpots);
+
+            return orderedSpots;
+        }
+
+        private List<Spot> optimizeRoute(List<Spot> spots) {
+            List<Spot> optimizedRoute = new ArrayList<>();
+            Set<Spot> visited = new HashSet<>();
+            Spot current = spots.get(0);
+            optimizedRoute.add(current);
+            visited.add(current);
+
+            while (visited.size() < spots.size()) {
+                Spot next = null;
+                double minDistance = Double.MAX_VALUE;
+                for (Spot spot : spots) {
+                    if (!visited.contains(spot)) {
+                        double distance = calculateDistance(current, spot);
+                        if (distance < minDistance) {
+                            minDistance = distance;
+                            next = spot;
+                        }
+                    }
+                }
+                if (next != null) {
+                    optimizedRoute.add(next);
+                    visited.add(next);
+                    current = next;
+                }
+            }
+
+            return optimizedRoute;
+        }
+
+        private double calculateDistance(Spot spot1, Spot spot2) {
+            double lat1 = spot1.getLatitude();
+            double lon1 = spot1.getLongitude();
+            double lat2 = spot2.getLatitude();
+            double lon2 = spot2.getLongitude();
+
+            double theta = lon1 - lon2;
+            double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2))
+                    + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+            dist = Math.acos(dist);
+            dist = Math.toDegrees(dist);
+            dist = dist * 60 * 1.1515 * 1.609344;  // convert to kilometers
+
+            return dist;
+        }
     }
 }
