@@ -253,16 +253,22 @@ public class RouteServiceImpl implements RouteService{
                 }
             }
 
-            // Step 3: Create the ordered list
+            // Step 3: Create the ordered list with alternating meal types
             List<Spot> orderedSpots = new ArrayList<>();
             orderedSpots.add(start);
 
-            // Add lunch spots first
-            orderedSpots.addAll(lunchSpots);
-            // Add dinner spots
-            orderedSpots.addAll(dinnerSpots);
-            // Add breakfast spots
-            orderedSpots.addAll(breakfastSpots);
+            int maxMeals = Math.max(Math.max(breakfastSpots.size(), lunchSpots.size()), dinnerSpots.size());
+            for (int i = 0; i < maxMeals; i++) {
+                if (i < lunchSpots.size()) {
+                    orderedSpots.add(lunchSpots.get(i));
+                }
+                if (i < dinnerSpots.size()) {
+                    orderedSpots.add(dinnerSpots.get(i));
+                }
+                if (i < breakfastSpots.size()) {
+                    orderedSpots.add(breakfastSpots.get(i));
+                }
+            }
 
             // Step 4: Add other spots in the optimal order to minimize distance
             for (Spot spot : otherSpots) {
