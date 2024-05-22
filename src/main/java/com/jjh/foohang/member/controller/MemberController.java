@@ -78,8 +78,7 @@ public class MemberController {
         return ResponseEntity.ok(token);
     }
     @GetMapping("/oauth")
-    public ResponseEntity<?> kakaoLogin()
-    {
+    public ResponseEntity<?> kakaoLogin(@RequestParam final String code) {
         return ResponseEntity.ok().build();
     }
 
