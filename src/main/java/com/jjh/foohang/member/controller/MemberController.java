@@ -77,6 +77,11 @@ public class MemberController {
 
         return ResponseEntity.ok(token);
     }
+    @GetMapping("/oauth")
+    public ResponseEntity<?> kakaoLogin()
+    {
+        return ResponseEntity.ok().build();
+    }
 
     //회원 정보 수정
 
