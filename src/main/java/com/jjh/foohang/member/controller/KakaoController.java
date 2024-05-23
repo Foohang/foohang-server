@@ -73,15 +73,15 @@ public class KakaoController {
             String nickname = userInfoJsonNode.get("kakao_account").get("profile").get("nickname").asText();
 
             Member member = new Member();
-            member.setPassword(String.valueOf(id));
-            member.setEmail(String.valueOf(id));
+            member.setPassword(id+"@kakao.com");
+            member.setEmail(id+"@kakao.com");
             // id로 이메일 비번 설정
             String token = service.login(member);
 
             URI redirectUriWithParams;
             if (token == null) {
                 // 로그인 실패 시
-                String redirectUrl = "http://localhost:5173/regist/" + id + "/" + nickname;
+                String redirectUrl = "http://localhost:5173/regist/" + id + "@kakao.com"+"/" + nickname;
                 redirectUriWithParams = new URI(redirectUrl);
             } else {
                 // 로그인 성공 시
