@@ -141,10 +141,10 @@ public class RouteServiceImpl implements RouteService{
         Spot tempSpot = null;
         int size = spotList.size();
 
-        for (int i = size; i>0; i--)
+        for (int i = 0; i<size; i++)
         {
-            tempSpot = spotList.get(i-1);
-            spotList.remove(i-1);
+            tempSpot = spotList.get(i);
+//            spotList.remove(i);
 
             Trail trail = new Trail();
             trail.setTravelId(travelIndex);
